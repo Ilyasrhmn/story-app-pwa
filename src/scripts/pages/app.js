@@ -87,30 +87,30 @@ class App {
 
     const notificationToggle = loggedIn
       ? `<li><button id="notification-toggle" class="flex items-center gap-2.5 px-4 py-2 rounded-xl font-bold text-slate-600 transition-all hover:bg-slate-100 group">
-          <i class="fa-solid ${isSubscribed ? 'fa-bell-slash' : 'fa-bell'} transition-all duration-300 group-hover:rotate-12 group-hover:text-primary-600"></i> 
+          <i class="fa-solid fa-fw ${isSubscribed ? 'fa-bell-slash' : 'fa-bell'} transition-all duration-300 group-hover:rotate-12 group-hover:text-primary-600"></i> 
           <span class="lg:inline">${isSubscribed ? 'Matikan Notifikasi' : 'Aktifkan Notifikasi'}</span>
          </button></li>`
       : '';
 
     const greeting = loggedIn
-      ? `<li><span class="flex items-center gap-2.5 px-4 py-2 text-slate-400 font-bold select-none"><i class="fa-solid fa-circle-user text-slate-300"></i> <span class="lg:inline">${getUserName()}</span></span></li>`
+      ? `<li><span class="flex items-center gap-2.5 px-4 py-2 text-slate-400 font-bold select-none"><i class="fa-solid fa-fw fa-circle-user text-slate-300"></i> <span class="lg:inline">${getUserName()}</span></span></li>`
       : '';
 
     const authLinks = loggedIn
       ? `<li><a href="#/add-story" class="nav-link ${currentRoute === '/add-story' ? 'active' : ''} group">
-          <i class="fa-solid fa-plus-circle transition-all duration-300 group-hover:scale-125 group-hover:text-primary-600"></i> 
+          <i class="fa-solid fa-fw fa-plus-circle transition-all duration-300 group-hover:scale-125 group-hover:text-primary-600"></i> 
           <span class="lg:inline">Tambah Cerita</span>
          </a></li>
          <li><button id="storiapp-logout-btn" class="flex items-center gap-2.5 px-4 py-2 rounded-xl font-black text-rose-500 transition-all hover:bg-rose-50 group">
-          <i class="fa-solid fa-right-from-bracket transition-transform duration-300 group-hover:translate-x-1.5"></i> 
+          <i class="fa-solid fa-fw fa-right-from-bracket transition-transform duration-300 group-hover:translate-x-1.5"></i> 
           <span class="lg:inline">Keluar</span>
          </button></li>`
-      : `<li><a href="#/login" class="nav-link ${currentRoute === '/login' ? 'active' : ''}"><i class="fa-solid fa-right-to-bracket"></i> Masuk</a></li>
-         <li><a href="#/register" class="btn-primary py-2.5 px-6 text-[10px] uppercase tracking-widest font-black"><i class="fa-solid fa-user-plus"></i> Daftar</a></li>`;
+      : `<li><a href="#/login" class="nav-link ${currentRoute === '/login' ? 'active' : ''}"><i class="fa-solid fa-fw fa-right-to-bracket"></i> Masuk</a></li>
+         <li><a href="#/register" class="btn-primary py-2.5 px-6 text-[10px] uppercase tracking-widest font-black"><i class="fa-solid fa-fw fa-user-plus"></i> Daftar</a></li>`;
 
     this.#navList.innerHTML = `
       <li><a href="#/" class="nav-link ${currentRoute === '/' ? 'active' : ''} group">
-        <i class="fa-solid fa-house-chimney transition-all duration-300 group-hover:-translate-y-1 group-hover:text-primary-600"></i> 
+        <i class="fa-solid fa-fw fa-house-chimney transition-all duration-300 group-hover:-translate-y-1 group-hover:text-primary-600"></i> 
         <span class="lg:inline">Beranda</span>
       </a></li>
       ${notificationToggle}
