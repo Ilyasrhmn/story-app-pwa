@@ -1,0 +1,12 @@
+const CONFIG = {
+  BASE_URL: 'https://story-api.dicoding.dev/v1',
+  DEFAULT_LAT: -6.2,
+  DEFAULT_LNG: 106.816666,
+  DEFAULT_ZOOM: 5,
+  DATABASE_NAME: 'story-app-db',
+  DATABASE_VERSION: 1,
+  OBJECT_STORE_NAME: 'stories',
+  PUSH_MSG_VAPID_PUBLIC_KEY: 'BMA7S_Y19v_Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y_z071Y',
+};
+
+export default CONFIG;

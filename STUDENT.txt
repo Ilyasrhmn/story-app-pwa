@@ -1,0 +1,18 @@
+Nama: ILYAS NUR ROHMAN
+Email: ilyasnurrohman14@gmail.com
+
+Map Service: OpenStreetMap (Gratis, tidak memerlukan API key)
+Tile Layer 1: OpenStreetMap Standard - https://tile.openstreetmap.org
+Tile Layer 2: CartoDB Dark Matter - https://basemaps.cartocdn.com
+Tile Layer 3: Esri World Imagery (Satelit) - https://server.arcgisonline.com
+
+Tautan Aplikasi : [MASUKKAN URL DEPLOYMENT DI SINI]
+
+Fitur Submission 2 yang telah diimplementasikan:
+1. PWA dengan dukungan instalasi dan mode offline (menggunakan vite-plugin-pwa).
+2. Web App Manifest lengkap dengan screenshots (desktop & mobile).
+3. Caching data API dan gambar menggunakan Service Worker.
+4. Database lokal menggunakan IndexedDB untuk menyimpan data story.
+5. Fitur Tambah Cerita mendukung Background Sync (otomatis terkirim saat online).
+6. Push Notification dengan tombol toggle di menu navigasi.
+7. Animasi transisi antar halaman (menggunakan View Transition API).
