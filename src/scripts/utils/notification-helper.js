@@ -75,6 +75,15 @@ const NotificationHelper = {
   },
 
   async subscribePush() {
+    if (!this._checkPermission()) {
+      await this._requestPermission();
+    }
+    
+    // Check again after request
+    if (!this._checkPermission()) {
+      throw new Error('User denied notification permission');
+    }
+
     const registration = await this._getServiceWorkerRegistration();
     if (!registration) {
       throw new Error('Service Worker not available for subscription');
