@@ -75,6 +75,10 @@ const NotificationHelper = {
   },
 
   async subscribePush() {
+    if (!this._checkAvailability()) {
+      throw new Error('Notification not supported in this browser');
+    }
+
     if (!this._checkPermission()) {
       await this._requestPermission();
     }
