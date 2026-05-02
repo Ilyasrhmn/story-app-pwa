@@ -3,7 +3,7 @@ import { showFormattedDate } from '../../utils/index';
 export default class HomeView {
   render() {
     return `
-      <section class="flex-1 flex flex-col md:flex-row relative overflow-hidden bg-slate-50 min-h-0">
+      <section class="h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] flex flex-col md:flex-row relative overflow-hidden bg-slate-50">
         <!-- Sidebar Daftar Cerita -->
         <aside id="storiapp-story-sidebar" class="w-full md:w-[420px] glass-panel md:m-4 md:rounded-3xl z-10 flex flex-col shadow-2xl relative order-2 md:order-1 h-[45vh] md:h-[calc(100vh-112px)] overflow-hidden">
           <div id="storiapp-explorer-content" class="flex flex-col h-full">
