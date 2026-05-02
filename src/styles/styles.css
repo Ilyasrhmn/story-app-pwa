@@ -101,11 +101,7 @@ main {
     overflow: hidden;
   }
 
-  #storiapp-story-sidebar { display: none !important; }
-
-  #storiapp-nav-list {
-    @apply flex flex-col gap-2 w-full h-full p-4 !important;
-  }
+  #storiapp-story-sidebar { display: none; }
 
   #storiapp-nav-list li { width: 100% !important; }
   #storiapp-nav-list li.mt-auto {
@@ -115,14 +111,14 @@ main {
   }
 
   #storiapp-nav-list li button, 
-  #storiapp-nav-list li a { @apply w-full justify-start !important; }
+  #storiapp-nav-list li a { @apply !w-full !justify-start; }
   #storiapp-nav-list .lg\:inline { display: inline !important; }
 
   /* Touch Targets */
   button, a { min-height: 44px; min-width: 44px; }
 
   #storiapp-mobile-extra {
-    @apply block mt-4 pt-2 border-t border-slate-100 !important;
+    @apply !block !mt-4 !pt-2 !border-t !border-slate-100;
   }
   
   #storiapp-stories-list { max-height: 35vh !important; overflow-y: auto !important; }
