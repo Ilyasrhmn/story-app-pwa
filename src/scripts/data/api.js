@@ -44,9 +44,7 @@ export async function getStories({ page = 1, size = 20, location = 1 } = {}) {
 
     if (result && !result.error) {
       const stories = result.listStory || [];
-      for (const story of stories) {
-        await DbHelper.putStory(story);
-      }
+      await Promise.all(stories.map(story => DbHelper.putStory(story)));
     }
     return result;
   } catch (error) {

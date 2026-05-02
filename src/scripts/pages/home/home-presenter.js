@@ -18,11 +18,15 @@ export default class HomePresenter {
 
   async init() {
     this.#view.showListLoading();
-    await this.#loadStories();
     this.#initMap();
     this.#view.bindStoryClick(this.#handleStoryClick.bind(this));
     this.#view.bindSearch(this.#handleSearch.bind(this));
     this.#view.bindSort(this.#handleSortToggle.bind(this));
+    
+    // Jalankan fetch secara asinkron agar tidak memblokir View Transition
+    this.#loadStories().then(() => {
+      this.#renderMarkers(this.#filteredStories);
+    });
   }
 
   async #loadStories() {
