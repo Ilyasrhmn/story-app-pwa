@@ -1,16 +1,11 @@
 import CONFIG from '../config';
+import { subscribeNotification, unsubscribeNotification } from '../data/api';
 
 const NotificationHelper = {
   async sendNotification({ title, options }) {
-    if (!this._checkAvailability()) {
-      return;
-    }
-
-    if (!this._checkPermission()) {
-      await this._requestPermission();
-    }
-
-    this._showNotification({ title, options });
+    // Menghapus trigger lokal sesuai standar Story API Dicoding.
+    // Notifikasi akan muncul secara otomatis via event 'push' di Service Worker.
+    console.log('Notification triggered by server');
   },
 
   _checkAvailability() {
@@ -83,7 +78,6 @@ const NotificationHelper = {
       await this._requestPermission();
     }
 
-    // Check again after request
     if (!this._checkPermission()) {
       throw new Error('User denied notification permission');
     }
@@ -93,21 +87,46 @@ const NotificationHelper = {
       throw new Error('Service Worker not available for subscription');
     }
 
+    // 1. Daftarkan Service Worker ke Push Manager Browser
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: this._urlBase64ToUint8Array(CONFIG.PUSH_MSG_VAPID_PUBLIC_KEY),
     });
-    return subscription;
+
+    // 2. Kirim data (endpoint & keys) ke Database Server Story API
+    try {
+      const response = await subscribeNotification(subscription); 
+      
+      if (response.error) {
+        // Rollback: Batalkan langganan lokal jika server gagal memproses
+        await subscription.unsubscribe();
+        throw new Error(response.message);
+      }
+      
+      return subscription;
+    } catch (error) {
+      // Rollback: Batalkan langganan lokal jika koneksi terputus
+      await subscription.unsubscribe();
+      console.error('Gagal menyimpan data langganan ke server:', error);
+      throw error; 
+    }
   },
 
   async unsubscribePush() {
     try {
       const subscription = await this.getPushSubscription();
       if (subscription) {
+        const { endpoint } = subscription.toJSON();
+        
+        // 1. Hapus dari Database Server Story API
+        await unsubscribeNotification(endpoint);
+        
+        // 2. Cabut izin dari Push Manager Browser
         await subscription.unsubscribe();
       }
     } catch (error) {
-      console.error('Failed to unsubscribe:', error);
+      console.error('Gagal memutus langganan:', error);
+      throw error;
     }
   },
 

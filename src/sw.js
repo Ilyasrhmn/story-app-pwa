@@ -92,11 +92,11 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Cerita Baru di StoryApp!';
   const options = {
     body: data.message || data.body || 'Seseorang baru saja membagikan ceritanya.',
-    icon: '/favicon.svg',
-    badge: '/favicon.svg',
+    icon: 'favicon.svg',
+    badge: 'favicon.svg',
     vibrate: [100, 50, 100],
     data: {
-      url: data.url || '/',
+      url: data.url || './',
     },
   };
 
