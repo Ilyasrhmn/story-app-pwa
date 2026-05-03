@@ -4,6 +4,7 @@ export default class HomeView {
   render() {
     return `
       <section id="storiapp-home-section" class="relative flex flex-col md:flex-row h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] overflow-hidden bg-slate-50">
+        <h1 class="sr-only">Beranda - Eksplorasi Cerita StoryApp</h1>
         <div id="storiapp-main-map"
           class="w-full md:flex-1 z-0 order-1 md:order-2 transition-all duration-500 ease-in-out
                  h-[calc(100vh-60px)] md:h-full"
@@ -25,7 +26,7 @@ export default class HomeView {
                 <div class="w-10 h-1 bg-slate-300 rounded-full"></div>
               </div>
               <div>
-                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Eksplorasi <span class="text-primary-600">Cerita</span></h1>
+                <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Eksplorasi <span class="text-primary-600">Cerita</span></h2>
                 <p class="text-slate-500 font-medium text-xs mt-1">Temukan pengalaman menarik dari seluruh dunia.</p>
               </div>
               
@@ -156,9 +157,9 @@ export default class HomeView {
         
         <div class="space-y-2 px-1">
           <div class="flex items-center justify-between gap-4">
-            <h2 class="font-black text-slate-900 group-hover:text-primary-600 transition-colors truncate">
+            <h3 class="font-black text-slate-900 group-hover:text-primary-600 transition-colors truncate">
               ${story.name}
-            </h2>
+            </h3>
             <span class="text-[10px] font-black text-slate-400 flex items-center gap-1.5 shrink-0 uppercase tracking-tighter">
               <i class="fa-regular fa-calendar text-primary-400"></i>
               ${showFormattedDate(story.createdAt)}

@@ -1,15 +1,13 @@
-import CONFIG from '../config';
+﻿import CONFIG from '../config';
 
 const NotificationHelper = {
   async sendNotification({ title, options }) {
     if (!this._checkAvailability()) {
-      console.log('Notification not supported in this browser');
-      return;
+        return;
     }
 
     if (!this._checkPermission()) {
-      console.log('User did not granted permission');
-      await this._requestPermission();
+        await this._requestPermission();
     }
 
     this._showNotification({ title, options });
@@ -27,11 +25,9 @@ const NotificationHelper = {
     const status = await Notification.requestPermission();
 
     if (status === 'denied') {
-      console.log('Notification permission denied');
     }
 
     if (status === 'default') {
-      console.log('Notification permission cancelled');
     }
   },
 
@@ -97,7 +93,6 @@ const NotificationHelper = {
       userVisibleOnly: true,
       applicationServerKey: this._urlBase64ToUint8Array(CONFIG.PUSH_MSG_VAPID_PUBLIC_KEY),
     });
-    console.log('Subscribed:', subscription);
     return subscription;
   },
 
@@ -106,7 +101,6 @@ const NotificationHelper = {
       const subscription = await this.getPushSubscription();
       if (subscription) {
         await subscription.unsubscribe();
-        console.log('Unsubscribed');
       }
     } catch (error) {
       console.error('Failed to unsubscribe:', error);
@@ -126,3 +120,4 @@ const NotificationHelper = {
 };
 
 export default NotificationHelper;
+

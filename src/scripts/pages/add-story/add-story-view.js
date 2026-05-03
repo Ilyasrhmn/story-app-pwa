@@ -20,12 +20,12 @@ export default class AddStoryView {
               <div class="space-y-8">
                 <!-- Description Field -->
                 <div>
-                  <label for="description" class="text-lg font-black text-slate-800 flex items-center gap-3 mb-4">
+                  <h2 class="text-lg font-black text-slate-800 flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 bg-primary-50 text-primary-600 rounded-xl flex items-center justify-center text-sm">
                       <i class="fa-solid fa-feather-pointed"></i>
                     </div>
-                    Pengalaman Anda
-                  </label>
+                    <label for="description">Pengalaman Anda</label>
+                  </h2>
                   <textarea
                     id="description"
                     name="description"
@@ -41,12 +41,12 @@ export default class AddStoryView {
 
                 <!-- Visual Media Section -->
                 <div class="pt-8 border-t border-slate-100">
-                  <label class="text-lg font-black text-slate-800 flex items-center gap-3 mb-6">
+                  <h2 class="text-lg font-black text-slate-800 flex items-center gap-3 mb-6">
                     <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-sm">
                       <i class="fa-solid fa-camera-retro"></i>
                     </div>
                     Visual Cerita
-                  </label>
+                  </h2>
                   
                   <!-- Toggle Tabs -->
                   <div class="flex p-1.5 bg-slate-100/50 rounded-2xl mb-8">
@@ -65,7 +65,7 @@ export default class AddStoryView {
                         <i class="fa-solid fa-images"></i>
                       </div>
                       <span class="text-lg md:text-xl font-black text-slate-800 group-hover:text-primary-800">Pilih visual cerita</span>
-                      <span class="text-sm text-slate-400 mt-2 font-medium">JPG, PNG atau WEBP · Maks 1MB</span>
+                      <span class="text-sm text-slate-400 mt-2 font-medium">JPG, PNG atau WEBP  Maks 1MB</span>
                       <input type="file" id="photo-file" name="photo" accept="image/*" class="hidden" required />
                     </label>
                     
@@ -118,15 +118,14 @@ export default class AddStoryView {
             </div>
           </div>
 
-          <!-- Right Column: Map Content -->
           <div class="lg:col-span-5 lg:sticky lg:top-28">
             <div class="glass-panel p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-xl shadow-slate-200/40 flex flex-col gap-6">
-              <label class="text-lg font-black text-slate-800 flex items-center gap-3">
+              <h2 class="text-lg font-black text-slate-800 flex items-center gap-3">
                 <div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center text-sm">
                   <i class="fa-solid fa-location-crosshairs"></i>
                 </div>
                 Lokasi Geografis
-              </label>
+              </h2>
               
               <div id="storiapp-add-story-map" class="w-full min-h-[300px] md:min-h-[400px] rounded-2xl md:rounded-[2rem] border border-slate-100 overflow-hidden shadow-inner z-0"></div>
               
@@ -356,3 +355,5 @@ export default class AddStoryView {
 
   destroy() { this.stopCamera(); }
 }
+
+

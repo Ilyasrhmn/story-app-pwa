@@ -4,19 +4,17 @@ export default class SavedView {
   render() {
     return `
       <section class="flex flex-col md:flex-row h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] overflow-hidden bg-slate-50">
-        <!-- Peta Utama -->
+        <h1 class="sr-only">Cerita Tersimpan - StoryApp</h1>
         <div id="storiapp-main-map" class="w-full md:flex-1 h-[40vh] md:h-full z-0 order-1 md:order-2" aria-label="Peta lokasi cerita tersimpan" role="application"></div>
 
-        <!-- Panel Cerita Tersimpan -->
         <aside id="storiapp-story-sidebar" class="w-full md:w-[420px] glass-panel md:m-4 md:rounded-3xl z-10 flex flex-col shadow-2xl order-2 md:order-1 h-[60vh] md:h-[calc(100vh-112px)] overflow-hidden">
           <div class="flex flex-col h-full">
             <div class="p-4 md:p-8 border-b border-slate-100/50 bg-white/60 backdrop-blur-md sticky top-0 z-20 space-y-3">
-              <!-- Drag handle visual (mobile) -->
               <div class="md:hidden flex justify-center -mt-1 mb-1">
                 <div class="w-10 h-1 bg-slate-300 rounded-full"></div>
               </div>
               <div>
-                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Cerita <span class="text-primary-600">Tersimpan</span></h1>
+                <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Cerita <span class="text-primary-600">Tersimpan</span></h2>
                 <p class="text-slate-500 font-medium text-xs mt-1">Daftar cerita yang Anda simpan secara offline.</p>
               </div>
             </div>
@@ -68,9 +66,9 @@ export default class SavedView {
         
         <div class="space-y-2 px-1">
           <div class="flex items-center justify-between gap-4">
-            <h2 class="font-black text-slate-900 group-hover:text-primary-600 transition-colors truncate">
+            <h3 class="font-black text-slate-900 group-hover:text-primary-600 transition-colors truncate">
               ${story.name}
-            </h2>
+            </h3>
             <span class="text-[10px] font-black text-slate-400 flex items-center gap-1.5 shrink-0 uppercase tracking-tighter">
               <i class="fa-regular fa-calendar text-primary-400"></i>
               ${showFormattedDate(story.createdAt)}

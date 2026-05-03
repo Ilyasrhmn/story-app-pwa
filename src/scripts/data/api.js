@@ -5,6 +5,7 @@ const ENDPOINTS = {
   REGISTER: `${CONFIG.BASE_URL}/register`,
   LOGIN: `${CONFIG.BASE_URL}/login`,
   STORIES: `${CONFIG.BASE_URL}/stories`,
+  NOTIFICATIONS_SUBSCRIBE: `${CONFIG.BASE_URL}/notifications/subscribe`,
 };
 
 function getAuthHeader() {
@@ -97,4 +98,29 @@ export async function addStory({ description, photo, lat, lon }) {
     }
     return { error: true, message: 'Gagal mengirim cerita. Cek koneksi internet.' };
   }
+}
+
+export async function subscribeNotification(subscription) {
+  const { endpoint, keys } = subscription.toJSON();
+  const response = await fetch(ENDPOINTS.NOTIFICATIONS_SUBSCRIBE, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify({ endpoint, keys: { p256dh: keys.p256dh, auth: keys.auth } }),
+  });
+  return response.json();
+}
+
+export async function unsubscribeNotification(endpoint) {
+  const response = await fetch(ENDPOINTS.NOTIFICATIONS_SUBSCRIBE, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify({ endpoint }),
+  });
+  return response.json();
 }

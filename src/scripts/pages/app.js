@@ -1,8 +1,9 @@
-import { resolveRoute } from '../routes/routes';
+﻿import { resolveRoute } from '../routes/routes';
 import { getActiveRoute } from '../routes/url-parser';
 import { isLoggedIn, clearAuth, getUserName } from '../utils/index';
 import NotificationHelper from '../utils/notification-helper';
 import { showToast } from '../utils/alert-helper';
+import { subscribeNotification, unsubscribeNotification } from '../data/api';
 
 class App {
   #content = null;
@@ -132,15 +133,23 @@ class App {
       toggleBtn?.addEventListener('click', async () => {
         try {
           if (isSubscribed) {
-            await NotificationHelper.unsubscribePush();
+            const subscription = await NotificationHelper.getPushSubscription();
+            if (subscription) {
+              await unsubscribeNotification(subscription.endpoint);
+              await NotificationHelper.unsubscribePush();
+            }
             showToast('Notifikasi dimatikan', 'success');
           } else {
-            const sub = await NotificationHelper.subscribePush();
-            if (sub) showToast('Notifikasi diaktifkan!', 'success');
+            const subscription = await NotificationHelper.subscribePush();
+            if (subscription) {
+              await subscribeNotification(subscription);
+              showToast('Notifikasi diaktifkan!', 'success');
+            }
           }
           this.#updateNav();
         } catch (error) {
-          showToast('Fitur tidak tersedia.', 'error');
+          console.error('Notification toggle error:', error);
+          showToast('Gagal mengatur notifikasi.', 'error');
         }
       });
     }
@@ -206,7 +215,7 @@ class App {
         <div class="w-24 h-24 bg-rose-100 text-rose-600 rounded-3xl flex items-center justify-center text-4xl mb-6 shadow-lg shadow-rose-200">
           <i class="fa-solid fa-circle-exclamation"></i>
         </div>
-        <h2 class="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tight">Terjadi Kesalahan</h2>
+        <h1 class="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tight">Terjadi Kesalahan</h1>
         <p class="text-slate-500 font-medium max-w-md mb-8">${message || 'Gagal memuat halaman.'}</p>
         <button onclick="window.location.reload()" class="btn-primary">Muat Ulang</button>
       </div>
@@ -215,3 +224,4 @@ class App {
 }
 
 export default App;
+
