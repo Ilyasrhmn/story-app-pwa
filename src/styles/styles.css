@@ -83,7 +83,7 @@ main {
 #storiapp-main { @apply flex-1 flex flex-col; }
 
 /* Home Page */
-#storiapp-main-map { @apply flex-1 min-h-[400px]; height: 100%; }
+#storiapp-main-map { @apply flex-1 min-h-[200px]; }
 
 
 
@@ -97,7 +97,7 @@ main {
     overflow: hidden;
   }
 
-  #storiapp-story-sidebar { display: none; }
+  /* sidebar is fixed/positioned via JS toggle on mobile */
 
   #storiapp-nav-list li { width: 100% !important; }
   #storiapp-nav-list li.mt-auto {

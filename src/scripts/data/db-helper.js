@@ -39,7 +39,6 @@ const DbHelper = {
   async deletePendingStory(id) {
     return (await dbPromise).delete('pending-stories', id);
   },
-  // CRUD untuk Cerita Tersimpan (Bookmark)
   async getSavedStory(id) {
     return (await dbPromise).get('saved-stories', id);
   },

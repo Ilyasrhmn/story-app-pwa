@@ -16,5 +16,6 @@ export default class HomePage {
 
   async afterRender() {
     await this.#presenter.init();
+    this.#view.afterRender();
   }
 }

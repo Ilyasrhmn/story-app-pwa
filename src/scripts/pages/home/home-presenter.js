@@ -25,7 +25,6 @@ export default class HomePresenter {
     this.#view.bindSort(this.#handleSortToggle.bind(this));
     this.#view.bindBookmarkClick(this.#handleBookmarkClick.bind(this));
     
-    // Jalankan fetch secara asinkron agar tidak memblokir View Transition
     this.#loadStories().then(() => {
       this.#renderMarkers(this.#filteredStories);
     });

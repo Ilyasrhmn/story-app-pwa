@@ -3,13 +3,20 @@ import { showFormattedDate } from '../../utils/index';
 export default class SavedView {
   render() {
     return `
-      <section class="h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] flex flex-col md:flex-row relative overflow-hidden bg-slate-50">
-        <!-- Sidebar Daftar Cerita -->
-        <aside id="storiapp-story-sidebar" class="w-full md:w-[420px] glass-panel md:m-4 md:rounded-3xl z-10 flex flex-col shadow-2xl relative order-2 md:order-1 h-[45vh] md:h-[calc(100vh-112px)] overflow-hidden">
-          <div id="storiapp-explorer-content" class="flex flex-col h-full">
-            <div class="p-6 md:p-8 border-b border-slate-100/50 bg-white/60 backdrop-blur-md sticky top-0 z-20 space-y-4">
+      <section class="flex flex-col md:flex-row h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] overflow-hidden bg-slate-50">
+        <!-- Peta Utama -->
+        <div id="storiapp-main-map" class="w-full md:flex-1 h-[40vh] md:h-full z-0 order-1 md:order-2" aria-label="Peta lokasi cerita tersimpan" role="application"></div>
+
+        <!-- Panel Cerita Tersimpan -->
+        <aside id="storiapp-story-sidebar" class="w-full md:w-[420px] glass-panel md:m-4 md:rounded-3xl z-10 flex flex-col shadow-2xl order-2 md:order-1 h-[60vh] md:h-[calc(100vh-112px)] overflow-hidden">
+          <div class="flex flex-col h-full">
+            <div class="p-4 md:p-8 border-b border-slate-100/50 bg-white/60 backdrop-blur-md sticky top-0 z-20 space-y-3">
+              <!-- Drag handle visual (mobile) -->
+              <div class="md:hidden flex justify-center -mt-1 mb-1">
+                <div class="w-10 h-1 bg-slate-300 rounded-full"></div>
+              </div>
               <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight uppercase">Cerita <span class="text-primary-600">Tersimpan</span></h1>
+                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Cerita <span class="text-primary-600">Tersimpan</span></h1>
                 <p class="text-slate-500 font-medium text-xs mt-1">Daftar cerita yang Anda simpan secara offline.</p>
               </div>
             </div>
@@ -19,34 +26,12 @@ export default class SavedView {
             </div>
           </div>
         </aside>
-
-        <!-- Wadah Peta Utama -->
-        <div id="storiapp-main-map" class="flex-1 w-full order-1 md:order-2 h-[55vh] md:h-full z-0" aria-label="Peta lokasi cerita tersimpan" role="application"></div>
       </section>
     `;
   }
 
   afterRender() {
-    this.#handleMobileTeleport();
-    window.addEventListener('resize', () => this.#handleMobileTeleport());
-  }
-
-  #handleMobileTeleport() {
-    const explorerContent = document.querySelector('#storiapp-explorer-content');
-    const mobileExtra = document.querySelector('#storiapp-mobile-extra');
-    const desktopAside = document.querySelector('#storiapp-story-sidebar');
-
-    if (!explorerContent || !mobileExtra || !desktopAside) return;
-
-    if (window.innerWidth < 768) {
-      if (!mobileExtra.contains(explorerContent)) {
-        mobileExtra.appendChild(explorerContent);
-      }
-    } else {
-      if (!desktopAside.contains(explorerContent)) {
-        desktopAside.appendChild(explorerContent);
-      }
-    }
+    // Layout now uses CSS flex order - no JS teleport needed
   }
 
   renderStories(stories) {

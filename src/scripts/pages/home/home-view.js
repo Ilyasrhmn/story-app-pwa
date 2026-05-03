@@ -3,13 +3,29 @@ import { showFormattedDate } from '../../utils/index';
 export default class HomeView {
   render() {
     return `
-      <section class="h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] flex flex-col md:flex-row relative overflow-hidden bg-slate-50">
-        <!-- Sidebar Daftar Cerita -->
-        <aside id="storiapp-story-sidebar" class="w-full md:w-[420px] glass-panel md:m-4 md:rounded-3xl z-10 flex flex-col shadow-2xl relative order-2 md:order-1 h-[45vh] md:h-[calc(100vh-112px)] overflow-hidden">
-          <div id="storiapp-explorer-content" class="flex flex-col h-full">
-            <div class="p-6 md:p-8 border-b border-slate-100/50 bg-white/60 backdrop-blur-md sticky top-0 z-20 space-y-4">
+      <section id="storiapp-home-section" class="relative flex flex-col md:flex-row h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] overflow-hidden bg-slate-50">
+        <div id="storiapp-main-map"
+          class="w-full md:flex-1 z-0 order-1 md:order-2 transition-all duration-500 ease-in-out
+                 h-[calc(100vh-60px)] md:h-full"
+          aria-label="Peta interaktif global" role="application"
+        ></div>
+
+        <aside id="storiapp-story-sidebar"
+          class="w-full md:w-[420px] glass-panel md:m-4 md:rounded-3xl z-10 flex flex-col shadow-2xl order-2 md:order-1
+                 md:h-[calc(100vh-112px)]
+                 fixed md:static bottom-0 left-0 right-0
+                 translate-y-full md:translate-y-0
+                 transition-transform duration-500 ease-in-out
+                 h-[60vh] overflow-hidden"
+          aria-hidden="true"
+        >
+          <div class="flex flex-col h-full">
+            <div class="p-4 md:p-8 border-b border-slate-100/50 bg-white/60 backdrop-blur-md sticky top-0 z-20 space-y-3">
+              <div class="md:hidden flex justify-center -mt-1 mb-1" id="storiapp-panel-drag-handle">
+                <div class="w-10 h-1 bg-slate-300 rounded-full"></div>
+              </div>
               <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight uppercase">Eksplorasi <span class="text-primary-600">Cerita</span></h1>
+                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Eksplorasi <span class="text-primary-600">Cerita</span></h1>
                 <p class="text-slate-500 font-medium text-xs mt-1">Temukan pengalaman menarik dari seluruh dunia.</p>
               </div>
               
@@ -33,7 +49,6 @@ export default class HomeView {
             </div>
             
             <div id="storiapp-stories-list" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 hide-scrollbar scroll-smooth" aria-live="polite" aria-label="Daftar cerita">
-              <!-- Konten cerita akan dimuat secara dinamis -->
             </div>
 
             <div class="p-4 bg-white/60 backdrop-blur-md border-t border-slate-100/50 text-center">
@@ -44,32 +59,66 @@ export default class HomeView {
           </div>
         </aside>
 
-        <!-- Wadah Peta Utama -->
-        <div id="storiapp-main-map" class="flex-1 w-full order-1 md:order-2 h-[55vh] md:h-full z-0" aria-label="Peta interaktif global" role="application"></div>
+        <button
+          id="storiapp-panel-fab"
+          class="md:hidden fixed bottom-6 right-5 z-[500] w-14 h-14 bg-primary-600 text-white rounded-full shadow-2xl shadow-primary-600/40 flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-primary-700"
+          aria-label="Tampilkan daftar cerita"
+        >
+          <i class="fa-solid fa-magnifying-glass" id="storiapp-fab-icon"></i>
+        </button>
       </section>
     `;
   }
 
   afterRender() {
-    this.#handleMobileTeleport();
-    window.addEventListener('resize', () => this.#handleMobileTeleport());
+    this.#initFabToggle();
   }
 
-  #handleMobileTeleport() {
-    const explorerContent = document.querySelector('#storiapp-explorer-content');
-    const mobileExtra = document.querySelector('#storiapp-mobile-extra');
-    const desktopAside = document.querySelector('#storiapp-story-sidebar');
+  #isPanelOpen = false;
 
-    if (!explorerContent || !mobileExtra || !desktopAside) return;
+  #initFabToggle() {
+    const fab = document.querySelector('#storiapp-panel-fab');
+    const sidebar = document.querySelector('#storiapp-story-sidebar');
+    const map = document.querySelector('#storiapp-main-map');
+    if (!fab || !sidebar || !map) return;
 
-    if (window.innerWidth < 768) {
-      if (!mobileExtra.contains(explorerContent)) {
-        mobileExtra.appendChild(explorerContent);
+    fab.addEventListener('click', () => {
+      this.#isPanelOpen = !this.#isPanelOpen;
+      this.#applyPanelState(sidebar, map, fab);
+    });
+
+    // Swipe down to close panel
+    let startY = 0;
+    sidebar.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+    sidebar.addEventListener('touchend', (e) => {
+      const deltaY = e.changedTouches[0].clientY - startY;
+      if (deltaY > 60 && this.#isPanelOpen) {
+        this.#isPanelOpen = false;
+        this.#applyPanelState(sidebar, map, fab);
       }
+    }, { passive: true });
+  }
+
+  #applyPanelState(sidebar, map, fab) {
+    const fabIcon = document.querySelector('#storiapp-fab-icon');
+    if (this.#isPanelOpen) {
+      sidebar.classList.remove('translate-y-full');
+      sidebar.removeAttribute('aria-hidden');
+      map.classList.remove('h-[calc(100vh-60px)]');
+      map.classList.add('h-[40vh]');
+      if (fabIcon) fabIcon.className = 'fa-solid fa-map';
+      fab.setAttribute('aria-label', 'Kembali ke peta penuh');
+      fab.classList.remove('bottom-6');
+      fab.classList.add('bottom-[calc(60vh+1.5rem)]');
     } else {
-      if (!desktopAside.contains(explorerContent)) {
-        desktopAside.appendChild(explorerContent);
-      }
+      sidebar.classList.add('translate-y-full');
+      sidebar.setAttribute('aria-hidden', 'true');
+      map.classList.add('h-[calc(100vh-60px)]');
+      map.classList.remove('h-[40vh]');
+      if (fabIcon) fabIcon.className = 'fa-solid fa-magnifying-glass';
+      fab.setAttribute('aria-label', 'Tampilkan daftar cerita');
+      fab.classList.add('bottom-6');
+      fab.classList.remove('bottom-[calc(60vh+1.5rem)]');
     }
   }
 
