@@ -79,32 +79,25 @@ self.addEventListener('sync', (event) => {
 
 // Push Notification Handling
 self.addEventListener('push', (event) => {
-  console.log('Push message received:', event);
-
   let data = {};
   try {
     data = event.data ? event.data.json() : {};
   } catch (e) {
-    console.error('Push data is not valid JSON, using fallback data.');
-    data = { title: 'Pembaruan StoryApp', body: event.data ? event.data.text() : 'Ada cerita baru untukmu!' };
+    data = {
+      title: 'StoryApp Update',
+      message: event.data ? event.data.text() : 'Ada cerita baru untukmu!'
+    };
   }
 
   const title = data.title || 'Cerita Baru di StoryApp!';
   const options = {
-    body: data.body || 'Seseorang baru saja membagikan ceritanya. Lihat sekarang!',
+    body: data.message || data.body || 'Seseorang baru saja membagikan ceritanya.',
     icon: '/favicon.svg',
     badge: '/favicon.svg',
     vibrate: [100, 50, 100],
     data: {
       url: data.url || '/',
     },
-    actions: [
-      {
-        action: 'view-story',
-        title: 'Lihat Detail',
-        icon: '/favicon.svg'
-      }
-    ]
   };
 
   event.waitUntil(self.registration.showNotification(title, options));

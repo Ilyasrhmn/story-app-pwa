@@ -1,13 +1,13 @@
-﻿import CONFIG from '../config';
+import CONFIG from '../config';
 
 const NotificationHelper = {
   async sendNotification({ title, options }) {
     if (!this._checkAvailability()) {
-        return;
+      return;
     }
 
     if (!this._checkPermission()) {
-        await this._requestPermission();
+      await this._requestPermission();
     }
 
     this._showNotification({ title, options });
@@ -45,16 +45,20 @@ const NotificationHelper = {
   async _getServiceWorkerRegistration() {
     if (!('serviceWorker' in navigator)) return null;
     
-    // Add a timeout to prevent hanging if SW fails to become ready
-    const swReadyPromise = navigator.serviceWorker.ready;
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Service Worker ready timeout')), 3000)
-    );
-
     try {
+      // First, try to get current registration immediately
+      const registration = await navigator.serviceWorker.getRegistration();
+      if (registration) return registration;
+      
+      // If not available, wait with a short timeout to prevent blocking the UI
+      const swReadyPromise = navigator.serviceWorker.ready;
+      const timeoutPromise = new Promise((resolve) =>
+        setTimeout(() => resolve(null), 1000)
+      );
+
       return await Promise.race([swReadyPromise, timeoutPromise]);
     } catch (error) {
-      console.warn('Service Worker registration not ready or timed out:', error);
+      console.error('Failed to get Service Worker registration:', error);
       return null;
     }
   },
@@ -78,7 +82,7 @@ const NotificationHelper = {
     if (!this._checkPermission()) {
       await this._requestPermission();
     }
-    
+
     // Check again after request
     if (!this._checkPermission()) {
       throw new Error('User denied notification permission');
