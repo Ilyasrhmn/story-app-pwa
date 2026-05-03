@@ -101,6 +101,10 @@ class App {
           <i class="fa-solid fa-fw fa-plus-circle transition-all duration-300 group-hover:scale-125 group-hover:text-primary-600"></i> 
           <span class="lg:inline">Tambah Cerita</span>
          </a></li>
+         <li><a href="#/saved" class="nav-link ${currentRoute === '/saved' ? 'active' : ''} group">
+          <i class="fa-solid fa-fw fa-bookmark transition-all duration-300 group-hover:scale-110 group-hover:text-primary-600"></i> 
+          <span class="lg:inline">Cerita Tersimpan</span>
+         </a></li>
          <li><button id="storiapp-logout-btn" class="flex items-center gap-2.5 px-5 py-2.5 w-full text-left rounded-xl font-black text-rose-500 transition-all hover:bg-rose-50 group">
           <i class="fa-solid fa-fw fa-right-from-bracket transition-transform duration-300 group-hover:translate-x-1.5"></i> 
           <span class="lg:inline">Keluar</span>

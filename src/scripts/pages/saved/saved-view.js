@@ -1,6 +1,6 @@
 import { showFormattedDate } from '../../utils/index';
 
-export default class HomeView {
+export default class SavedView {
   render() {
     return `
       <section class="h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] flex flex-col md:flex-row relative overflow-hidden bg-slate-50">
@@ -9,43 +9,19 @@ export default class HomeView {
           <div id="storiapp-explorer-content" class="flex flex-col h-full">
             <div class="p-6 md:p-8 border-b border-slate-100/50 bg-white/60 backdrop-blur-md sticky top-0 z-20 space-y-4">
               <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight uppercase">Eksplorasi <span class="text-primary-600">Cerita</span></h1>
-                <p class="text-slate-500 font-medium text-xs mt-1">Temukan pengalaman menarik dari seluruh dunia.</p>
-              </div>
-              
-              <div class="flex items-center gap-2">
-                <div class="relative flex-1 group">
-                  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                  </span>
-                  <input 
-                    type="text" 
-                    id="storiapp-search-stories" 
-                    placeholder="Cari cerita..." 
-                    class="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-11 pr-4 text-sm focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all"
-                    aria-label="Cari cerita"
-                  />
-                </div>
-                <button id="storiapp-sort-toggle" class="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-500 hover:text-primary-600 hover:border-primary-200 transition-all shadow-sm" title="Urutkan Berdasarkan Waktu">
-                  <i class="fa-solid fa-arrow-down-short-wide"></i>
-                </button>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight uppercase">Cerita <span class="text-primary-600">Tersimpan</span></h1>
+                <p class="text-slate-500 font-medium text-xs mt-1">Daftar cerita yang Anda simpan secara offline.</p>
               </div>
             </div>
             
-            <div id="storiapp-stories-list" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 hide-scrollbar scroll-smooth" aria-live="polite" aria-label="Daftar cerita">
+            <div id="storiapp-stories-list" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 hide-scrollbar scroll-smooth" aria-live="polite" aria-label="Daftar cerita tersimpan">
               <!-- Konten cerita akan dimuat secara dinamis -->
-            </div>
-
-            <div class="p-4 bg-white/60 backdrop-blur-md border-t border-slate-100/50 text-center">
-              <a href="#/add-story" class="btn-primary w-full py-3 text-sm rounded-2xl">
-                  <i class="fa-solid fa-plus-circle"></i> Bagikan Ceritamu
-              </a>
             </div>
           </div>
         </aside>
 
         <!-- Wadah Peta Utama -->
-        <div id="storiapp-main-map" class="flex-1 w-full order-1 md:order-2 h-[55vh] md:h-full z-0" aria-label="Peta interaktif global" role="application"></div>
+        <div id="storiapp-main-map" class="flex-1 w-full order-1 md:order-2 h-[55vh] md:h-full z-0" aria-label="Peta lokasi cerita tersimpan" role="application"></div>
       </section>
     `;
   }
@@ -81,10 +57,10 @@ export default class HomeView {
       container.innerHTML = `
         <div class="flex flex-col items-center justify-center py-20 text-slate-400">
           <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-3xl mb-4">
-            <i class="fa-regular fa-folder-open"></i>
+            <i class="fa-solid fa-bookmark"></i>
           </div>
-          <p class="font-bold text-lg text-slate-600">Tidak ada cerita</p>
-          <p class="text-sm">Coba kata kunci lain.</p>
+          <p class="font-bold text-lg text-slate-600">Belum ada cerita tersimpan</p>
+          <p class="text-sm">Simpan cerita di beranda untuk melihatnya di sini.</p>
         </div>`;
       return;
     }
@@ -99,9 +75,9 @@ export default class HomeView {
           <button 
             class="bookmark-btn absolute bottom-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-lg text-primary-600 shadow-lg transition-transform hover:scale-110 active:scale-95" 
             data-id="${story.id}" 
-            aria-label="${story.isSaved ? 'Hapus dari Tersimpan' : 'Simpan Cerita'}"
+            aria-label="Hapus dari Tersimpan"
           >
-            <i class="${story.isSaved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
+            <i class="fa-solid fa-bookmark"></i>
           </button>
         </div>
         
@@ -123,33 +99,6 @@ export default class HomeView {
     `).join('');
   }
 
-  bindSearch(handler) {
-    const searchInput = document.querySelector('#storiapp-search-stories');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        handler(e.target.value.toLowerCase());
-      });
-    }
-  }
-
-  bindSort(handler) {
-    const sortBtn = document.querySelector('#storiapp-sort-toggle');
-    if (sortBtn) {
-      sortBtn.addEventListener('click', () => {
-        handler();
-      });
-    }
-  }
-
-  updateSortIcon(isDescending) {
-    const icon = document.querySelector('#storiapp-sort-toggle i');
-    if (icon) {
-      icon.className = isDescending
-        ? 'fa-solid fa-arrow-down-short-wide'
-        : 'fa-solid fa-arrow-up-wide-short';
-    }
-  }
-
   bindStoryClick(handler) {
     const list = document.querySelector('#storiapp-stories-list');
     if (!list) return;
@@ -163,17 +112,10 @@ export default class HomeView {
     list.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         const card = e.target.closest('.story-card');
-        if (card) { e.preventDefault(); handler(card.dataset.id); }
-      }
-    });
-  }
-
-  highlightStoryCard(storyId) {
-    document.querySelectorAll('.story-card').forEach((card) => {
-      const isActive = card.dataset.id === storyId;
-      card.classList.toggle('active', isActive);
-      if (isActive) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (card) {
+          e.preventDefault();
+          handler(card.dataset.id);
+        }
       }
     });
   }
@@ -190,14 +132,26 @@ export default class HomeView {
     });
   }
 
+  highlightStoryCard(storyId) {
+    document.querySelectorAll('.story-card').forEach((card) => {
+      if (card.dataset.id === storyId) {
+        card.classList.add('active');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        card.classList.remove('active');
+      }
+    });
+  }
+
   showListLoading() {
     const container = document.querySelector('#storiapp-stories-list');
     if (container) {
       container.innerHTML = `
         <div class="flex flex-col items-center justify-center py-20 text-slate-400">
-           <div class="animate-spin h-10 w-10 border-4 border-slate-200 border-t-primary-600 rounded-full mb-4"></div>
-           <p class="font-black text-xs uppercase tracking-widest">Sinkronisasi...</p>
-        </div>`;
+          <div class="w-10 h-10 border-4 border-slate-200 border-t-primary-500 rounded-full animate-spin mb-4"></div>
+          <p class="font-bold text-sm tracking-widest uppercase">Memuat Cerita...</p>
+        </div>
+      `;
     }
   }
 
@@ -205,12 +159,11 @@ export default class HomeView {
     const container = document.querySelector('#storiapp-stories-list');
     if (container) {
       container.innerHTML = `
-        <div class="flex flex-col items-center justify-center py-10 text-rose-500 bg-rose-50/30 rounded-3xl m-4 p-8 text-center border border-rose-100">
+        <div class="flex flex-col items-center justify-center py-20 text-rose-500">
           <i class="fa-solid fa-triangle-exclamation text-3xl mb-4"></i>
-          <p class="font-black text-sm uppercase">Koneksi Gagal</p>
-          <p class="text-xs font-medium opacity-70 mt-1">${message}</p>
-          <button onclick="window.location.reload()" class="mt-6 btn-secondary py-2 px-6 text-xs bg-white">Coba Lagi</button>
-        </div>`;
+          <p class="font-bold text-sm text-center px-4">${message}</p>
+        </div>
+      `;
     }
   }
 }

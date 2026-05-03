@@ -2,6 +2,7 @@ import { getStories } from '../../data/api';
 import { createMap, addMarker, highlightMarker, createPopupContent } from '../../utils/map-helper';
 import { showToast } from '../../utils/alert-helper';
 import CONFIG from '../../config';
+import DbHelper from '../../data/db-helper';
 
 export default class HomePresenter {
   #view;
@@ -22,6 +23,7 @@ export default class HomePresenter {
     this.#view.bindStoryClick(this.#handleStoryClick.bind(this));
     this.#view.bindSearch(this.#handleSearch.bind(this));
     this.#view.bindSort(this.#handleSortToggle.bind(this));
+    this.#view.bindBookmarkClick(this.#handleBookmarkClick.bind(this));
     
     // Jalankan fetch secara asinkron agar tidak memblokir View Transition
     this.#loadStories().then(() => {
@@ -90,6 +92,26 @@ export default class HomePresenter {
     }
   }
 
+  async #handleBookmarkClick(storyId) {
+    try {
+      const isSaved = await DbHelper.getSavedStory(storyId);
+      if (isSaved) {
+        await DbHelper.deleteSavedStory(storyId);
+        showToast('Dihapus dari cerita tersimpan', 'success');
+      } else {
+        const storyToSave = this.#stories.find(s => s.id === storyId);
+        if (storyToSave) {
+          await DbHelper.putSavedStory(storyToSave);
+          showToast('Disimpan ke cerita tersimpan', 'success');
+        }
+      }
+      this.#applyInteractivity();
+    } catch (error) {
+      console.error('Bookmark error:', error);
+      showToast('Gagal mengubah status simpanan.', 'error');
+    }
+  }
+
   #handleSearch(keyword) {
     this.#searchKeyword = keyword.toLowerCase();
     this.#applyInteractivity();
@@ -116,9 +138,24 @@ export default class HomePresenter {
       return this.#isDescending ? dateB - dateA : dateA - dateB;
     });
 
-    this.#view.renderStories(this.#filteredStories);
+    this.#enrichAndRenderStories(this.#filteredStories);
     if (this.#map) {
       this.#renderMarkers(this.#filteredStories);
+    }
+  }
+
+  async #enrichAndRenderStories(stories) {
+    try {
+      const savedStories = await DbHelper.getAllSavedStories();
+      const savedIds = new Set(savedStories.map(s => s.id));
+      const enrichedStories = stories.map(story => ({
+        ...story,
+        isSaved: savedIds.has(story.id)
+      }));
+      this.#view.renderStories(enrichedStories);
+    } catch (error) {
+      console.error('Failed to enrich stories:', error);
+      this.#view.renderStories(stories);
     }
   }
 }
